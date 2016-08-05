@@ -710,6 +710,15 @@ func (dm *DockerManager) GetContainers(all bool) ([]*kubecontainer.Container, er
 	return result, nil
 }
 
+func getNovaInfo(c *docker.APIContainers) (string, types.UID, error) {
+	podName := strings.TrimPrefix(c.Names[0], "/")
+	podUID := types.UID(podName)
+	if len(podName) == 0 {
+		return podName, podUID, fmt.Errorf("Error get nova info %q", podName)
+	}
+	return podName, podUID, nil
+}
+
 func (dm *DockerManager) GetPods(all bool) ([]*kubecontainer.Pod, error) {
 	start := time.Now()
 	defer func() {
@@ -731,7 +740,9 @@ func (dm *DockerManager) GetPods(all bool) ([]*kubecontainer.Pod, error) {
 			continue
 		}
 
-		podUID, podName, podNamespace, err := getPodInfoFromContainer(c)
+		//podUID, podName, podNamespace, err := getPodInfoFromContainer(c)
+		podName, podUID, err := getNovaInfo(c)
+
 		if err != nil {
 			glog.Errorf("Error examining the container: %v", err)
 			continue
@@ -742,7 +753,7 @@ func (dm *DockerManager) GetPods(all bool) ([]*kubecontainer.Pod, error) {
 			pod = &kubecontainer.Pod{
 				ID:        podUID,
 				Name:      podName,
-				Namespace: podNamespace,
+				Namespace: "default",
 			}
 			pods[podUID] = pod
 		}

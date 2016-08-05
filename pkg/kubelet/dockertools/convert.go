@@ -22,6 +22,8 @@ import (
 
 	docker "github.com/fsouza/go-dockerclient"
 	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
+	//"strconv"
+	//"github.com/golang/glog"
 )
 
 // This file contains helper functions to convert docker API types to runtime
@@ -50,14 +52,21 @@ func toRuntimeContainer(c *docker.APIContainers) (*kubecontainer.Container, erro
 		return nil, fmt.Errorf("unable to convert a nil pointer to a runtime container")
 	}
 
-	dockerName, hash, err := getDockerContainerNameInfo(c)
-	if err != nil {
-		return nil, err
-	}
+	//dockerName, hash, err := getDockerContainerNameInfo(c)
+	dockerName := strings.TrimPrefix(c.Names[0], "/")
+	hash := uint64(32)
+	//hash, err := strconv.ParseUint("nova", 16, 32)
+	//if err != nil {
+	//	glog.Warningf("invalid container hash %q in container %q", hash, dockerName)
+	//}
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	return &kubecontainer.Container{
 		ID:      kubecontainer.DockerID(c.ID).ContainerID(),
-		Name:    dockerName.ContainerName,
+		//Name:    dockerName.ContainerName,
+		Name:    dockerName,
 		Image:   c.Image,
 		Hash:    hash,
 		Created: c.Created,

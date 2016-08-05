@@ -590,12 +590,12 @@ func (s *Server) getRun(request *restful.Request, response *restful.Response) {
 
 // getExec handles requests to run a command inside a container.
 func (s *Server) getExec(request *restful.Request, response *restful.Response) {
-	podNamespace, podID, uid, container := getContainerCoordinates(request)
-	pod, ok := s.host.GetPodByName(podNamespace, podID)
-	if !ok {
-		response.WriteError(http.StatusNotFound, fmt.Errorf("pod does not exist"))
-		return
-	}
+	_, podID, uid, container := getContainerCoordinates(request)
+	//pod, ok := s.host.GetPodByName(podNamespace, podID)
+	//if !ok {
+	//	response.WriteError(http.StatusNotFound, fmt.Errorf("pod does not exist"))
+	//	return
+	//}
 	stdinStream, stdoutStream, stderrStream, errorStream, conn, tty, ok := s.createStreams(request, response)
 	if conn != nil {
 		defer conn.Close()
@@ -605,7 +605,7 @@ func (s *Server) getExec(request *restful.Request, response *restful.Response) {
 		return
 	}
 	cmd := request.Request.URL.Query()[api.ExecCommandParamm]
-	err := s.host.ExecInContainer(kubecontainer.GetPodFullName(pod), uid, container, cmd, stdinStream, stdoutStream, stderrStream, tty)
+	err := s.host.ExecInContainer(podID, uid, container, cmd, stdinStream, stdoutStream, stderrStream, tty)
 	if err != nil {
 		msg := fmt.Sprintf("Error executing command in container: %v", err)
 		glog.Error(msg)

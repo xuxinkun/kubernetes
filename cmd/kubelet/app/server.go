@@ -649,7 +649,7 @@ func RunKubelet(kcfg *KubeletConfig) error {
 
 func startKubelet(k KubeletBootstrap, podCfg *config.PodConfig, kc *KubeletConfig) {
 	// start the kubelet
-	go wait.Until(func() { k.Run(podCfg.Updates()) }, 0, wait.NeverStop)
+	//go wait.Until(func() { k.Run(podCfg.Updates()) }, 0, wait.NeverStop)
 
 	// start the kubelet server
 	if kc.EnableServer {
@@ -870,7 +870,7 @@ func CreateAndInitKubelet(kc *KubeletConfig) (k KubeletBootstrap, pc *config.Pod
 
 	k.BirthCry()
 
-	k.StartGarbageCollection()
+	//k.StartGarbageCollection()
 
 	return k, pc, nil
 }

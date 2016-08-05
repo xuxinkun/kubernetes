@@ -3425,7 +3425,8 @@ func (kl *Kubelet) findContainer(podFullName string, podUID types.UID, container
 	if err != nil {
 		return nil, err
 	}
-	pod := kubecontainer.Pods(pods).FindPod(podFullName, podUID)
+	//pod := kubecontainer.Pods(pods).FindPod(podFullName, podUID)
+	pod := kubecontainer.Pods(pods).FindPodByID(types.UID(podFullName))
 	return pod.FindContainerByName(containerName), nil
 }
 
@@ -3446,7 +3447,7 @@ func (kl *Kubelet) RunInContainer(podFullName string, podUID types.UID, containe
 // ExecInContainer executes a command in a container, connecting the supplied
 // stdin/stdout/stderr to the command's IO streams.
 func (kl *Kubelet) ExecInContainer(podFullName string, podUID types.UID, containerName string, cmd []string, stdin io.Reader, stdout, stderr io.WriteCloser, tty bool) error {
-	podUID = kl.podManager.TranslatePodUID(podUID)
+	//podUID = kl.podManager.TranslatePodUID(podUID)
 
 	container, err := kl.findContainer(podFullName, podUID, containerName)
 	if err != nil {
