@@ -1,0 +1,2 @@
+export ETCD_HOST=127.0.0.1
+export ETCD_PORT=4001

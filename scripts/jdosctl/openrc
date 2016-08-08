@@ -1,0 +1,5 @@
+export KUBE_APISERVER=10.8.65.91
+export KUBE_API_PORT=6443
+export KUBE_USER=admin
+export KUBE_PASSWD=admin_passwd
+export KUBE_CMD=sh

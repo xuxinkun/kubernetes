@@ -1,0 +1,11 @@
+function jdosexec {
+    kubectl exec -s https://$KUBE_APISERVER:$KUBE_API_PORT $1 -it $KUBE_CMD --username $KUBE_USER --password $KUBE_PASSWD --namespace $KUBE_USER --insecure-skip-tls-verify
+}
+
+function jdosget {
+    kubectl get pod -s https://$KUBE_APISERVER:$KUBE_API_PORT --username $KUBE_USER --password $KUBE_PASSWD --namespace $KUBE_USER --insecure-skip-tls-verify
+}
+
+function jdosdescribe {
+    kubectl describe pod $1 -s https://$KUBE_APISERVER:$KUBE_API_PORT --username $KUBE_USER --password $KUBE_PASSWD --namespace $KUBE_USER --insecure-skip-tls-verify
+}
