@@ -8,7 +8,7 @@ def _generate_policy(user):
         "spec": {
             "user": user,
             "namespace": user,
-            "resource": "pod",
+            "resource": "pods",
             "nonResourcePath": "*",
             "apiGroup": "*"
         }
